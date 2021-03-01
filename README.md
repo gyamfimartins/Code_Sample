@@ -1,5 +1,5 @@
 # Sport Results
-A simple android app that demonstrates consuming nested Json array and displaying them in chronological order.
+A simple android app that demonstrates consuming nested Json object and displaying them in chronological order.
 
 ## Table of Content
 - Description
@@ -8,7 +8,7 @@ A simple android app that demonstrates consuming nested Json array and displayin
 
 ### Description
 
-This project consumes a nested json array using Retrofit 2 and Gson Libraries. The data is displayed in the recyclerview 
+This project consumes a nested json object using Retrofit 2 and Gson Libraries. The data is displayed in the recyclerview 
 
 ### App architecture
 
