@@ -14,7 +14,7 @@ This project consumes a nested json array using Retrofit 2 and Gson Libraries. T
 
 I used Android Architecture Components (AAC). It can solve problems with configuration changes, supports data persistence, reduces boilerplate code, helps to prevent memory leaks and simplifies async data loading into your UI.
 
-![](images/device-2021-01-31-153931.png)
+![](Images/aac.png)
 
 ### Libraries
 
