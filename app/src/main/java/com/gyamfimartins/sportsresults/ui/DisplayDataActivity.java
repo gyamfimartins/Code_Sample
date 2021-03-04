@@ -5,9 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-
 import com.gyamfimartins.sportsresults.R;
 import com.gyamfimartins.sportsresults.adapter.NewsAdapter;
 import com.gyamfimartins.sportsresults.model.News;
@@ -35,14 +33,9 @@ public class DisplayDataActivity extends AppCompatActivity {
 
         newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         newsAdapter = new NewsAdapter();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         getnews();
     }
+
 
     private void getnews() {
         newsViewModel.getAllNews().observe(this, new Observer<List<News>>() {
@@ -54,4 +47,8 @@ public class DisplayDataActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 }

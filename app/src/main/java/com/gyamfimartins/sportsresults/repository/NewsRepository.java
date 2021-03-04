@@ -1,24 +1,18 @@
 package com.gyamfimartins.sportsresults.repository;
 
 
-import android.widget.Toast;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.JsonObject;
-import com.gyamfimartins.sportsresults.api.SportApi;
+import com.gyamfimartins.sportsresults.network.RetrofitRequest;
+import com.gyamfimartins.sportsresults.network.SportApi;
 import com.gyamfimartins.sportsresults.model.F1Result;
 import com.gyamfimartins.sportsresults.model.NBAResult;
 import com.gyamfimartins.sportsresults.model.News;
 import com.gyamfimartins.sportsresults.model.Sport;
 import com.gyamfimartins.sportsresults.model.TennisResult;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -31,7 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsRepository {
-    private String DATE_FORMAT = "MMM dd yyyy HH:mm:ss a";
+
 
     public NewsRepository() {
 
@@ -41,12 +35,7 @@ public class NewsRepository {
         final MutableLiveData<List<News>> data = new MutableLiveData<>();
         final List<News> newsList = new ArrayList<>();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ancient-wood-1161.getsandbox.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        SportApi sportApi = retrofit.create(SportApi.class);
+        SportApi sportApi = RetrofitRequest.getRetrofitInstance().create(SportApi.class);
         Call<Sport> call = sportApi.getSportResults();
 
         call.enqueue(new Callback<Sport>() {
@@ -113,7 +102,7 @@ public class NewsRepository {
 
             @Override
             public void onFailure(Call<Sport> call, Throwable t) {
-
+                data.setValue(null);
             }
         });
 

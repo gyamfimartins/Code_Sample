@@ -1,6 +1,5 @@
-package com.gyamfimartins.sportsresults.api;
+package com.gyamfimartins.sportsresults.network;
 
-import com.google.gson.JsonObject;
 import com.gyamfimartins.sportsresults.model.Sport;
 
 import retrofit2.Call;
@@ -9,7 +8,7 @@ import retrofit2.http.POST;
 
 public interface SportApi {
 
-    @Headers({"Content-Type: application/json", "Content-Length: 0"})
+    @Headers({"Content-Type: application/json"})
     @POST("results")
     Call<Sport> getSportResults();
 }
