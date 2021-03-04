@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implements Filterable {
-    private List<News> newsList = new ArrayList<>();
+    private List<News> newsList;
+    private List<News> newsListfull;
+
   private final DateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy");
     @NonNull
     @Override
@@ -41,7 +43,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implements
 
         if (position == 0) {
             holder.textView_publicationDate.setText(publicationDate);
-            getFilter().filter(publicationDate);
+           // getFilter().filter(publicationDate);
         } else {
             News previousnews = newsList.get(position - 1);
             String previousDate = dateFormat.format(previousnews.getPublicationDate());
@@ -61,6 +63,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implements
 
     public void getnewsList(List<News> newsList) {
         this.newsList = newsList;
+        newsListfull = new ArrayList<>(newsList);
         notifyDataSetChanged();
     }
 
@@ -76,11 +79,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implements
             List<News> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(newsList);
+                filteredList.addAll(newsListfull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (News item : newsList) {
+                for (News item : newsListfull) {
 
                     String filterdate = dateFormat.format(item.getPublicationDate());
                     if (filterdate.toLowerCase().contains(filterPattern)) {
@@ -103,4 +106,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> implements
             notifyDataSetChanged();
         }
     };
+
+
 }
