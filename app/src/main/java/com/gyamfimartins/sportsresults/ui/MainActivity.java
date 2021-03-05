@@ -1,6 +1,10 @@
 package com.gyamfimartins.sportsresults.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,47 +16,77 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.gyamfimartins.sportsresults.R;
+import com.gyamfimartins.sportsresults.adapter.NewsAdapter;
+import com.gyamfimartins.sportsresults.model.News;
+import com.gyamfimartins.sportsresults.util.SimpleDividerItemDecoration;
+import com.gyamfimartins.sportsresults.viewmodel.NewsViewModel;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private ProgressBar progress_circular;
-    private Button btn_loaddata;
+    private RecyclerView rvnews;
+    private NewsViewModel newsViewModel;
+    private NewsAdapter newsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progress_circular = findViewById(R.id.progress_circular);
+        rvnews = findViewById(R.id.rvnews);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvnews.setHasFixedSize(true);
+        rvnews.setLayoutManager(linearLayoutManager);
+        rvnews.addItemDecoration(new SimpleDividerItemDecoration(this));
 
-        btn_loaddata = findViewById(R.id.btn_loaddata);
-        btn_loaddata.setOnClickListener(new View.OnClickListener() {
+        newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
+        newsAdapter = new NewsAdapter();
+        getnews();
+
+    }
+
+    private void getnews() {
+        newsViewModel.getAllNews().observe(this, new Observer<List<News>>() {
             @Override
-            public void onClick(View view) {
-                delay();
+            public void onChanged(List<News> news) {
+                newsAdapter.getnewsList(news);
+                rvnews.setAdapter(newsAdapter);
+
             }
         });
-
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
 
-    private void delay() {
-        btn_loaddata.setVisibility(View.GONE);
-        progress_circular.setVisibility(View.VISIBLE);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        //Initialize SearchView
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void run() {
-                startActivity(new Intent(MainActivity.this, DisplayDataActivity.class));
-                finish();
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
-        }, 3000);
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // filter recycler view when text is changed
+                newsAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
-
-
-
 
 
 }
